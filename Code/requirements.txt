@@ -1,0 +1,8 @@
+chardet==3.0.4
+configobj==5.0.6
+oauthlib==3.1.0
+pymongo==3.10.0
+PyYAML==5.2
+redis==3.3.11
+six==1.13.0
+tornado==6.0.3

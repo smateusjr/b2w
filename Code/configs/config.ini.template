@@ -1,0 +1,150 @@
+[versions]
+    utils = 'v1'
+
+#Deveria ser outro servidor
+[clients]
+    [[104d49692b504866898faf58997e5fc7]]
+        secret = "8c480dc316ee4ab1a51d1aefc6a73687"
+        [[[logins]]]
+            user1 = 'PpassWord4123@;'
+
+[http_codes]
+    [[internal_error]]
+        code = 500
+        error = 'server_error'
+        error_description = 'Internal Server Error.'
+    [[bad_request]]
+        code = 400
+        error = 'bad_request'
+        error_description = 'Bad Request.'
+    [[not_found]]
+        code = 404
+        error = 'not_found'
+        error_description = 'Not Found.'
+    [[unauthorized]]
+        code = 401
+        error = 'unauthorized'
+        error_description = 'Unauthorized.'
+    [[forbidden]]
+        code = 403
+        error = 'forbidden'
+        error_description = 'Forbidden.'
+    [[temporarily_unavailable]]
+        code = 503
+        error = 'temporarily_unavailable'
+        error_description = 'Server Temporarily Unavailable.'
+
+    [[client_id_not_found]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Request was missing the 'client_id' parameter.'
+
+    [[invalid_fields]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Invalid fields.'
+
+    [[failed_create_code]]
+        code = 500
+        error = 'server_error'
+        error_description = 'Failed to create Grant code.'
+
+    [[invalid_code]]
+        code = 401
+        error = 'invalid_grant'
+        error_description = 'Grant code is Invalid.'
+
+    [[missing_fields]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Request was missing search parameters.'
+
+    [[invalid_token]]
+        code = 401
+        error = 'invalid_token'
+        error_description = 'Token is Invalid.'
+
+    [[missing_token]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Request was missing the 'access_token' or 'refresh_token' parameter.'
+
+    [[login_input_not_found]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Request was missing the 'login input' parameter.'
+
+    [[username_input_not_found]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Request was missing the 'username input' parameter.'
+
+    [[invalid_json]]
+        code = 400
+        error = 'invalid_json'
+        error_description = 'Invalid json format.'
+
+    [[invalid_password]]
+        code = 401
+        error = 'unauthorized_user'
+        error_description = 'Unauthorized user.'
+
+    [[password_field_not_found]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Request was missing the 'password input' parameter.'
+
+    [[unsupported_response_type]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'unsupported_response_type.'
+
+    [[invalid_grant_type]]
+        code = 400
+        error = 'invalid_request'
+        error_description = 'Grant type is invalid.'
+
+    [[invalid_client_secret]]
+        code = 400
+        error = 'invalid_client_secret'
+        error_description = 'Invalid client_secret.'
+
+    [[unauthorized_client_secret]]
+        code = 401
+        error = 'unauthorized_client'
+        error_description = 'Unauthorized client_secret.'
+
+    [[unauthorized_client_id]]
+        code = 401
+        error = 'unauthorized_client'
+        error_description = 'Unauthorized client_id.'
+
+    [[access_denied]]
+        code = 401
+        error = 'access_denied'
+        error_description = 'access denied.'
+
+    [[unauthorized_user]]
+        code = 401
+        error = 'unauthorized_user'
+        error_description = 'Unauthorized user.'
+
+    [[inactive_user]]
+        code = 401
+        error = 'unauthorized_user'
+        error_description = 'User is inactive.'
+
+    [[invalid_credentials]]
+        code = 401
+        error = 'invalid_credentials'
+        error_description = 'Invalid Credentials.'
+
+    [[unknowncredentials]]
+        code = 401
+        error = 'unauthorized_user'
+        error_description = 'Unknown Credentials.'
+
+    [[invalid_authorization_type]]
+        code = 401
+        error = 'invalid_request'
+        error_description = 'Invalid header authorization type.'

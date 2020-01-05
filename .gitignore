@@ -1,0 +1,8 @@
+*.ini
+.DS_Store
+keep
+*.pyc
+dump.rdb
+*.pid
+*.log
+.idea/

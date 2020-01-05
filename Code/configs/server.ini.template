@@ -1,0 +1,16 @@
+[tornado]
+    port = 8889
+    instances = 2
+    log_path = ''
+    propagate = 'True'
+[docs]
+    url = 'http://localhost:8889'
+
+[redis]
+    host = '127.0.0.1'
+    port = 6379
+    db = 10
+
+[grant]
+    token_expire = 86400
+

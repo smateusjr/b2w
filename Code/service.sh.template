@@ -1,0 +1,107 @@
+#!/bin/bash 
+
+VERDE="\033[1;32m"
+AMARELO="\033[1;33m"
+AZUL="\033[1;34m"
+VERMELHO="\033[1;31m"
+END="\033[m"
+
+#App name
+NOMEAPP='PLANET'
+
+#Virtualenv dir
+DIRVENV='~/.virtualenvs/b2w/'
+
+#App code dir
+DIRBASE='~/Documents/projects/b2w/Code/'
+
+#Pid file
+PIDFILE='planet.pid'
+
+ProgressBar() {
+    tput civis
+    for X in $(seq 20)
+    do
+        for i in ..
+        do
+            echo -en "\033[1D$i"
+            sleep .1
+        done
+    done
+    tput cnorm
+}
+
+# Check dir exist
+if [ ! -d "$DIRVENV" ]; then
+    echo "'$DIRVENV' Directory for virtualenv not found."
+    exit
+fi
+
+if [ ! -d "$DIRBASE" ]; then
+    echo "'$DIRBASE' Directory for application not found."
+    exit
+fi
+
+# Source virtualenv
+source $DIRVENV/bin/activate
+
+cd $DIRBASE
+
+COMMAND="python main.py"
+
+ case $1 in
+    start)
+        echo -en "Starting $NOMEAPP "
+        ProgressBar
+        eval "$COMMAND -action daemon"
+        echo -e " [\033[0;32m ok\033[m ]"
+    ;;
+
+    stop)
+        echo -en "Stopping $NOMEAPP "
+        ProgressBar
+        eval "$COMMAND -action kill"
+        echo -e " [\033[0;32m ok\033[m ]"
+    ;;
+
+    reload)
+        echo -en "Reloading $NOMEAPP config "
+        ProgressBar
+        eval "$COMMAND -action reload"
+        echo -e " [\033[0;32m ok\033[m ]"
+    ;;
+
+    unittest)
+        echo -en "Testing $NOMEAPP "
+        ProgressBar
+        eval "python -W ignore::DeprecationWarning -m unittest discover -s $DIRBASE/tests/ -t $DIRBASE/tests/"
+    ;;
+
+    help)
+        echo -en "Usage: /etc/init.d/invoice stop|start|restart|reload|status|help|unittest "
+    ;;
+
+    restart)
+        $0 stop
+        sleep 5
+        $0 start
+    ;;
+
+    status)
+        if [ ! -f "$DIRBASE/$PIDFILE" ]; then
+            echo -e "$NOMEAPP is NOT running"
+            exit
+        fi
+        PID=$(cat $DIRBASE/$PIDFILE)
+        if [ -n "${PID}" -a -d "/proc/${PID}" ]; then
+            echo -e "$NOMEAPP is running (PID: $PID)"
+        else
+            echo -e "$NOMEAPP is NOT running"
+        fi
+    ;;
+
+    *)
+        $0 help
+    ;;
+
+esac
