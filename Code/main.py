@@ -20,9 +20,6 @@ from multiprocessing import Lock
 # Swagger
 from docs.compile_json import yaml_to_json
 
-# Mongodb
-import services.mongodb as mongo
-
 # Log Class
 import services.logs as logs
 
@@ -127,20 +124,6 @@ def main(args):
 
     redisdb = redis.StrictRedis(**dict(server_config['redis']))
 
-    # mongo
-    try:
-        db = mongo.mongoDB(
-            server_config['mongodb']['host'],
-            int(server_config['mongodb']['port']),
-            server_config['mongodb']['database'],
-            server_config['mongodb']['colletion']
-        )
-        db.check_status()
-    except Exception as e:
-        print(e)
-        print('Failed to connect to MongoDb server...')
-        sys.exit(1)
-
     # Lista com as urls
     URLS = [
         (r'/favicon.ico',
@@ -158,7 +141,6 @@ def main(args):
         static_path=os.path.join(ROOTPATH, 'templates/static'),
         root_path=ROOTPATH,
         test_mode=args.test,
-        mongodb=db,
         logs=logs.LogClass(
             server_config['tornado']['log_path'] if 'log_path' in\
             server_config['tornado'].keys() and\
@@ -169,9 +151,7 @@ def main(args):
                 server_config['tornado']['propagate']) if 'propagate'\
                 in server_config['tornado'].keys() and\
                 server_config['tornado']['propagate'] else False
-
         )
-
     )
 
     # Urls do docs - docs

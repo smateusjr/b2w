@@ -3,6 +3,12 @@ from math import ceil
 from datetime import datetime
 import services.base_exception as base_exception
 
+# Swapi
+import services.swapi as swapi
+
+# Mongodb
+import services.mongodb as mongo
+
 
 class PlanetHandler(BaseHandler):
 
@@ -10,6 +16,16 @@ class PlanetHandler(BaseHandler):
 
         try:
             super(PlanetHandler, self).prepare()
+
+            # mongo
+            self.mongodb = mongo.mongoDB(
+                self.server_config['mongodb']['host'],
+                int(self.server_config['mongodb']['port']),
+                self.server_config['mongodb']['database'],
+                self.server_config['mongodb']['colletion']
+            )
+            self.mongodb.check_status()
+
         except base_exception.BaseExceptionError as e:
             self.send_base_error_exception(e.error)
         except Exception as e:
@@ -131,9 +147,26 @@ class PlanetHandler(BaseHandler):
                 self.fields['terrain']):
                 raise base_exception.BaseExceptionError('missing_fields')
 
-            id = self.mongodb.planet_save(self.fields)
+            # check qtd_films
+            ext_swapi = swapi.Swapi(
+                '%s%s' % (
+                    self.server_config['swapi']['url'],
+                    self.fields['name']
+                )
+            )
+            qtd_films = ext_swapi.get_planet_by_name()
+            data = dict(
+                name=self.fields['name'],
+                climate=self.fields['climate'],
+                terrain=self.fields['terrain'],
+                qtd_films=self.fields['qtd_films'] if 'qtd_films' in\
+                    self.fields and self.fields['qtd_films'] else qtd_films
+            )
+            id_planet = self.mongodb.planet_save(data)
 
-            self.finish(id)
+            self.finish(
+                dict(id=id_planet.__str__())
+            )
 
         except base_exception.BaseExceptionError as e:
             self.send_base_error_exception(e.error)

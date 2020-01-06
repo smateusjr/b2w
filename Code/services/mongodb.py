@@ -76,7 +76,7 @@ class mongoDB():
         Check Mongo Status
         """
         try:
-            self.database.admin.command('ismaster')
+            self.client.admin.command('ismaster')
             return True
         except ConnectionFailure:
             return False

@@ -6,3 +6,4 @@ dump.rdb
 *.pid
 *.log
 .idea/
+Code/docs/json-generated/*

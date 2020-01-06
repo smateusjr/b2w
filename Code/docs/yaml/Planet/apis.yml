@@ -219,26 +219,21 @@ apis:
             paramType: query
           - name: name
             description: "Planet Name."
-            required: false
+            required: true
             type: string
             paramType: query
           - name: climate
             description: "Planet Climate."
-            required: false
+            required: true
             type: string
             paramType: query
           - name: terrain
             description: "Planet Terrain."
-            required: false
+            required: true
             type: string
             paramType: query
           - name: qtd_films
-            description: "Number of planet film appearances."
-            required: false
-            type: integer
-            paramType: query
-          - name: npage
-            description: "Show page number."
+            description: "Number of planet film appearances. Empty to search from SWAPI"
             required: false
             type: integer
             paramType: query
