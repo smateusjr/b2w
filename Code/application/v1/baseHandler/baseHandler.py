@@ -28,12 +28,20 @@ class BaseHandler(tornado.web.RequestHandler):
             return self.application.settings['server_config']
 
     @property
-    def redisdb(self):
+    def redis_db_token(self):
         instance = tornado.ioloop.IOLoop.instance()
-        if hasattr(instance, 'redisdb'):
-            return instance.redisdb
+        if hasattr(instance, 'redis_db_token'):
+            return instance.redis_db_token
         else:
-            return self.application.settings['redisdb']
+            return self.application.settings['redis_db_token']
+
+    @property
+    def redis_db_swapi(self):
+        instance = tornado.ioloop.IOLoop.instance()
+        if hasattr(instance, 'redis_db_swapi'):
+            return instance.redis_db_swapi
+        else:
+            return self.application.settings['redis_db_swapi']
 
     def initialize(self):
         self.utils = self.application.settings.get('utils')
@@ -103,7 +111,7 @@ class BaseHandler(tornado.web.RequestHandler):
         # Check Token if exist
         self.access_token = token.check_oauth2_token(
             self.headers,
-            self.redisdb,
+            self.redis_db_token,
             self.config['clients'],
             self.fields,
             self.request.remote_ip,

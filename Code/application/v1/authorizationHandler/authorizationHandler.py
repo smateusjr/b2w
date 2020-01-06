@@ -48,7 +48,7 @@ class AuthorizationHandler(BaseHandler):
                 self.fields['client_id'],
                 self.config['clients'][self.fields['client_id']]['secret'],
                 self.request.remote_ip,
-                self.redisdb,
+                self.redis_db_token,
                 self.server_config['grant']['token_expire'],
                 self.request.log
             )

@@ -110,19 +110,20 @@ def main(args):
     # Utils
     utils = importlib.import_module('utils.%s.utils' % (config['versions']['utils']))
 
-    # redis
+    # token redis
     try:
         redis.StrictRedis(
-            host=server_config['redis']['host'],
-            port=server_config['redis']['port'],
-            db=server_config['redis']['db']
+            host=server_config['redis_token']['host'],
+            port=server_config['redis_token']['port'],
+            db=server_config['redis_token']['db']
         ).ping()
     except Exception as e:
         print(e)
         print('Failed to connect to Redis server...')
         sys.exit(1)
 
-    redisdb = redis.StrictRedis(**dict(server_config['redis']))
+    redis_db_token = redis.StrictRedis(**dict(server_config['redis_token']))
+    redis_db_swapi = redis.StrictRedis(**dict(server_config['redis_swapi']))
 
     # Lista com as urls
     URLS = [
@@ -135,7 +136,8 @@ def main(args):
     settings = dict(
         config=config,
         server_config=server_config,
-        redisdb=redisdb,
+        redis_db_token=redis_db_token,
+        redis_db_swapi=redis_db_swapi,
         utils=utils,
         template_path=os.path.join(ROOTPATH, 'templates'),
         static_path=os.path.join(ROOTPATH, 'templates/static'),

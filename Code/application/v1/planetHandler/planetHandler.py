@@ -152,9 +152,11 @@ class PlanetHandler(BaseHandler):
                 '%s%s' % (
                     self.server_config['swapi']['url'],
                     self.fields['name']
-                )
+                ),
+                self.redis_db_swapi,
+                self.server_config['grant']['swapi_expire']
             )
-            qtd_films = ext_swapi.get_planet_by_name()
+            qtd_films = ext_swapi.get_qtd_planet_by_name()
             data = dict(
                 name=self.fields['name'],
                 climate=self.fields['climate'],

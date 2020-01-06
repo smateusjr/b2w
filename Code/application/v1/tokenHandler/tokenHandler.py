@@ -37,7 +37,7 @@ class TokenHandler(BaseHandler):
 
             atoken = token.load_token(
                 self.fields['token'],
-                self.redisdb,
+                self.redis_db_token,
                 self.config['clients'],
                 self.fields,
                 self.request.remote_ip,
@@ -77,7 +77,7 @@ class TokenHandler(BaseHandler):
             self.request.log._info('refresh TokenHandler')
             atoken = token.load_token(
                 self.fields['token'],
-                self.redisdb,
+                self.redis_db_token,
                 self.config['clients'],
                 self.fields,
                 self.request.remote_ip,
@@ -93,7 +93,7 @@ class TokenHandler(BaseHandler):
                 atoken['client_id'],
                 atoken['client_secret'],
                 self.request.remote_ip,
-                self.redisdb,
+                self.redis_db_token,
                 self.server_config['grant']['token_expire'],
                 self.request.log
             )
@@ -112,13 +112,13 @@ class TokenHandler(BaseHandler):
 
         try:
             if access_token:
-                self.redisdb.delete(access_token)
+                self.redis_db_token.delete(access_token)
                 self.request.log._info(
                     'Access Token Remove: %s' % access_token
                 )
 
             if refresh_token:
-                self.redisdb.delete(refresh_token)
+                self.redis_db_token.delete(refresh_token)
                 self.request.log._info(
                     'Refresh Token Remove: %s' % refresh_token
                 )
@@ -135,7 +135,7 @@ class TokenHandler(BaseHandler):
 
             atoken = token.load_token(
                 self.fields['token'],
-                self.redisdb,
+                self.redis_db_token,
                 self.config['clients'],
                 self.fields,
                 self.request.remote_ip,

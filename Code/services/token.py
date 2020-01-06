@@ -7,7 +7,7 @@ def save_token(
         client_id,
         client_secret,
         ip,
-        redisdb,
+        redis_db_token,
         token_expire,
         log
 ):
@@ -29,14 +29,14 @@ def save_token(
         token_save_refresh.update(
             type="refresh_token"
         )
-        redisdb.set(refresh_tmp, str(token_save_refresh))
+        redis_db_token.set(refresh_tmp, str(token_save_refresh))
 
         # make access token
         token_save.update(
             type="access_token",
             expires=token_expire
         )
-        redisdb.setex(access_tmp, token_save['expires'], str(token_save))
+        redis_db_token.setex(access_tmp, token_save['expires'], str(token_save))
 
         log._info(
             'Access Token e Refresh Token Save: %s - %s - %s' % (
@@ -52,9 +52,9 @@ def save_token(
         raise base_exception.BaseExceptionError('internal_error', e)
 
 
-def load_token(token, redisdb, config_clients, fields, ip, log):
+def load_token(token, redis_db_token, config_clients, fields, ip, log):
     try:
-        get_redis_token = redisdb.get(token)
+        get_redis_token = redis_db_token.get(token)
 
         if get_redis_token:
             token_load = eval(get_redis_token.decode(),
@@ -90,12 +90,12 @@ def load_token(token, redisdb, config_clients, fields, ip, log):
         raise base_exception.BaseExceptionError('internal_error', e)
 
 
-def check_oauth2_token(headers, redisdb, config_clients, fields, ip, log):
+def check_oauth2_token(headers, redis_db_token, config_clients, fields, ip, log):
     auth = headers.get('Authorization')
     if auth:
         token = load_token(
             auth,
-            redisdb,
+            redis_db_token,
             config_clients,
             fields,
             ip,
