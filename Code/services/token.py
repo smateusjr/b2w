@@ -90,14 +90,17 @@ def load_token(token, redisdb, config_clients, fields, ip, log):
         raise base_exception.BaseExceptionError('internal_error', e)
 
 
-def check_oauth2_token(headers, remote_ip):
+def check_oauth2_token(headers, redisdb, config_clients, fields, ip, log):
     auth = headers.get('Authorization')
     if auth:
-        token = load_token(auth)
-
-        if token['ip'] != remote_ip:
-            raise base_exception.BaseExceptionError('invalid_token')
-
+        token = load_token(
+            auth,
+            redisdb,
+            config_clients,
+            fields,
+            ip,
+            log,
+        )
         return token
 
     return None

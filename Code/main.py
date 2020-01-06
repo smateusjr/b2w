@@ -113,7 +113,7 @@ def main(args):
     # Utils
     utils = importlib.import_module('utils.%s.utils' % (config['versions']['utils']))
 
-    # Sobe o redis
+    # redis
     try:
         redis.StrictRedis(
             host=server_config['redis']['host'],
@@ -122,17 +122,23 @@ def main(args):
         ).ping()
     except Exception as e:
         print(e)
-        print('Falied to connect to Redis server...')
+        print('Failed to connect to Redis server...')
         sys.exit(1)
 
     redisdb = redis.StrictRedis(**dict(server_config['redis']))
 
     # mongo
     try:
-        mongo.check_status()
+        db = mongo.mongoDB(
+            server_config['mongodb']['host'],
+            int(server_config['mongodb']['port']),
+            server_config['mongodb']['database'],
+            server_config['mongodb']['colletion']
+        )
+        db.check_status()
     except Exception as e:
         print(e)
-        print('Falied to connect to MongoDb server...')
+        print('Failed to connect to MongoDb server...')
         sys.exit(1)
 
     # Lista com as urls
@@ -141,7 +147,6 @@ def main(args):
          tornado.web.StaticFileHandler,
          {'path': '/templates/static/'}),
     ]
-
 
     # configs para o tornado
     settings = dict(
@@ -153,7 +158,7 @@ def main(args):
         static_path=os.path.join(ROOTPATH, 'templates/static'),
         root_path=ROOTPATH,
         test_mode=args.test,
-        mongo=mongo,
+        mongodb=db,
         logs=logs.LogClass(
             server_config['tornado']['log_path'] if 'log_path' in\
             server_config['tornado'].keys() and\

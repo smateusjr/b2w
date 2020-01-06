@@ -1,0 +1,3 @@
+apis:
+  - path: Planet
+    description: "Planet."

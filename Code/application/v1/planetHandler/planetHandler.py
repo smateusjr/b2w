@@ -2,7 +2,6 @@ from application.v1.baseHandler.baseHandler import BaseHandler
 from math import ceil
 from datetime import datetime
 import services.base_exception as base_exception
-import services.mongodb as mongodb
 
 
 class PlanetHandler(BaseHandler):
@@ -132,23 +131,9 @@ class PlanetHandler(BaseHandler):
                 self.fields['terrain']):
                 raise base_exception.BaseExceptionError('missing_fields')
 
-            insert = """INSERT INTO invoices (
-                                Document,
-                                Description,
-                                Amount,
-                                ReferenceMonth,
-                                ReferenceYear) 
-                      VALUES (%s, %s, %s, %s, %s);"""
-            cursor = self.db.cursor()
+            id = self.mongodb.planet_save(self.fields)
 
-            try:
-                cursor.execute(insert, params=q_params)
-            except mysql.connector.InterfaceError as e:
-                self.send_base_error_internal(e)
-
-            self.db.commit()
-            cursor.close()
-            self.finish(dict())
+            self.finish(id)
 
         except base_exception.BaseExceptionError as e:
             self.send_base_error_exception(e.error)

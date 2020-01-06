@@ -1,0 +1,142 @@
+models:
+  getAuthenticationToken:
+    id: getAuthenticationToken
+    description: ""
+    required:
+      - code
+      - status
+      - data
+    properties:
+      code:
+        type: number
+      status:
+        type: string
+      data:
+        $ref: dataGetAuthenticationToken
+
+  mergeAccount:
+    id: mergeAccount
+    description: ""
+    required:
+      - code
+      - status
+      - data
+    properties:
+      code:
+        type: number
+      status:
+        type: string
+      data:
+        $ref: dataMergeAccount
+
+  unmergeAccount:
+      id: unmergeAccount
+      description: ""
+      required:
+        - code
+        - status
+      properties:
+        code:
+          type: number
+        status:
+          type: string
+
+  logoutUser:
+    id: logoutUser
+    description: ""
+    required:
+      - code
+      - status
+    properties:
+      code:
+        type: number
+      status:
+        type: string
+
+  checkAuthenticationToken:
+    id: checkAuthenticationToken
+    description: ""
+    required:
+      - code
+      - status
+      - data
+    properties:
+      code:
+        type: number
+      status:
+        type: string
+      data:
+        $ref: dataCheckAuthenticationToken
+
+  refreshToken:
+      id: refreshToken
+      description: ""
+      required:
+        - code
+        - status
+        - data
+      properties:
+        code:
+          type: number
+        status:
+          type: string
+        data:
+          $ref: dataRefreshToken
+
+  # OBJS
+  dataGetAuthenticationToken:
+    id: dataGetAuthenticationToken
+    description: ""
+    required:
+      - authentication_token
+      - refresh_token
+      - expires_time
+      - session_id
+    properties:
+      authentication_token:
+        type: string
+      refresh_token:
+        type: string
+      expires_time:
+        type: number
+      session_id:
+        type: string
+
+  dataMergeAccount:
+    id: dataMergeAccount
+    description: ""
+    required:
+      - authentication_token
+      - refresh_token
+      - expires_time
+    properties:
+      authentication_token:
+        type: string
+      expires_time:
+        type: number
+      refresh_token:
+        type: string
+
+  dataCheckAuthenticationToken:
+    id: dataCheckAuthenticationToken
+    description: ""
+    required:
+      - msisdn
+    properties:
+      msisdn:
+        type: string
+
+  dataRefreshToken:
+    id: dataRefreshToken
+    description: ""
+    required:
+      - authentication_token
+      - refresh_token
+      - expires_time
+    properties:
+      authentication_token:
+        type: string
+      refresh_token:
+        type: string
+      expires_time:
+        type: number

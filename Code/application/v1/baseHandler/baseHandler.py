@@ -39,7 +39,7 @@ class BaseHandler(tornado.web.RequestHandler):
         self.utils = self.application.settings.get('utils')
         self.http_codes = self.config['http_codes']
         self.headers = self.utils.get_headers(self.request.headers)
-        self.db = self.application.settings.get('db')
+        self.mongodb = self.application.settings.get('mongodb')
 
         self.request.log = self.application.settings.get('logs')
         self.request.log.set_body(self.headers, self.request)
@@ -102,9 +102,13 @@ class BaseHandler(tornado.web.RequestHandler):
             ) for k in self.request.arguments}
 
         # Check Token if exist
-        self.token = token.check_oauth2_token(
+        self.access_token = token.check_oauth2_token(
             self.headers,
-            self.request.remote_ip
+            self.redisdb,
+            self.config['clients'],
+            self.fields,
+            self.request.remote_ip,
+            self.request.log,
         )
 
     def send_base_error_exception(

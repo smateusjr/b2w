@@ -1,0 +1,1 @@
+{"apiVersion": "1.0.0", "swaggerVersion": "1.2", "resourcePath": "/", "info": {"title": "Planet API", "description": "Star Wars Planets", "termsOfServiceUrl": "http://www.sergiomateus.com.br", "contact": "smateus@gmail.com", "license": "Sergio Mateus", "licenseUrl": "http://www.sergiomateus.com.br"}, "apis": [{"path": "Planet", "description": "Planet."}]}

@@ -1,0 +1,292 @@
+apis:
+  - path: /{version}/planet/authorization
+    operations:
+      - method: POST
+        summary: "Get Autorization Token."
+        notes: "Return the access token."
+        nickname: getAccessToken
+        type: getAccessToken
+        parameters:
+          - name: version
+            description: "API version."
+            required: true
+            type: string
+            enum:
+            - v1
+            default: "v1"
+            paramType: path
+          - name: client_id
+            description: "Client id."
+            required: true
+            type: string
+            paramType: query
+          - name: client_secret
+            description: "Client secret."
+            required: true
+            type: string
+            paramType: query
+          - name: login
+            description: "User login."
+            required: true
+            type: string
+            paramType: query
+          - name: password
+            description: "User password."
+            required: true
+            type: password
+            paramType: query
+        consumes:
+          - application/x-www-form-urlencoded
+        produces:
+          - application/json
+        responseMessages:
+
+  - path: /{version}/planet/token
+    operations:
+      - method: GET
+        summary: "Open Token."
+        notes: "Return token content."
+        nickname: getToken
+        type: getToken
+        parameters:
+          - name: version
+            description: "API version."
+            required: true
+            type: string
+            enum:
+            - v1
+            default: "v1"
+            paramType: path
+          - name: client_id
+            description: "Client id."
+            required: true
+            type: string
+            paramType: query
+          - name: client_secret
+            description: "Client secret."
+            required: true
+            type: string
+            paramType: query
+          - name: token
+            description: "Access or refresh token."
+            required: true
+            type: string
+            paramType: query
+        consumes:
+          - application/x-www-form-urlencoded
+        produces:
+          - application/json
+        responseMessages:
+      - method: POST
+        summary: "Manipulate Tokens."
+        notes: "Refresh or revoke tokens."
+        nickname: postToken
+        type: postToken
+        parameters:
+          - name: version
+            description: "API version."
+            required: true
+            type: string
+            enum:
+            - v1
+            default: "v1"
+            paramType: path
+          - name: client_id
+            description: "Client id."
+            required: true
+            type: string
+            paramType: query
+          - name: client_secret
+            description: "Client secret."
+            required: true
+            type: string
+            paramType: query
+          - name: token
+            description: "Access or refreh tokens."
+            required: true
+            type: string
+            paramType: query
+          - name: grant_type
+            description: "Grant type, refreh only refresh_token and revoke only access token."
+            required: true
+            type: string
+            enum:
+            - refresh_token
+            - revoke_token
+            paramType: query
+        consumes:
+          - application/x-www-form-urlencoded
+        produces:
+          - application/json
+        responseMessages:
+
+  - path: /{version}/planet/
+    operations:
+      - method: GET
+        summary: "Get planets."
+        notes: "Return the planets info."
+        nickname: getplanet
+        type: getplanet
+        parameters:
+          - name: version
+            description: "API version."
+            required: true
+            type: string
+            enum:
+            - v1
+            default: "v1"
+            paramType: path
+          - name: Authorization
+            description: "Access Token."
+            required: true
+            type: string
+            paramType: header
+          - name: client_id
+            description: "Client id."
+            required: true
+            type: string
+            paramType: query
+          - name: client_secret
+            description: "Client secret."
+            required: true
+            type: string
+            paramType: query
+          - name: id_planet
+            description: "Planet id."
+            required: false
+            type: string
+            paramType: query
+          - name: name
+            description: "Planet Name."
+            required: false
+            type: string
+            paramType: query
+          - name: climate
+            description: "Planet Climate."
+            required: false
+            type: string
+            paramType: query
+          - name: terrain
+            description: "Planet Terrain."
+            required: false
+            type: string
+            paramType: query
+          - name: qtd_films
+            description: "Number of planet film appearances."
+            required: false
+            type: integer
+            paramType: query
+          - name: npage
+            description: "Show page number."
+            required: false
+            type: integer
+            paramType: query
+
+        consumes:
+          - application/x-www-form-urlencoded
+        produces:
+          - application/json
+        responseMessages:
+
+      - method: POST
+        summary: "Insert planets."
+        notes: "Insert planets."
+        nickname: postplanets
+        type: postplanets
+        parameters:
+          - name: version
+            description: "API version."
+            required: true
+            type: string
+            enum:
+            - v1
+            default: "v1"
+            paramType: path
+          - name: Authorization
+            description: "Access Token."
+            required: true
+            type: string
+            paramType: header
+          - name: client_id
+            description: "Client id."
+            required: true
+            type: string
+            paramType: query
+          - name: client_secret
+            description: "Client secret."
+            required: true
+            type: string
+            paramType: query
+          - name: name
+            description: "Planet Name."
+            required: false
+            type: string
+            paramType: query
+          - name: climate
+            description: "Planet Climate."
+            required: false
+            type: string
+            paramType: query
+          - name: terrain
+            description: "Planet Terrain."
+            required: false
+            type: string
+            paramType: query
+          - name: qtd_films
+            description: "Number of planet film appearances."
+            required: false
+            type: integer
+            paramType: query
+          - name: npage
+            description: "Show page number."
+            required: false
+            type: integer
+            paramType: query
+        consumes:
+          - application/x-www-form-urlencoded
+        produces:
+          - application/json
+        responseMessages:
+
+  - path: /{version}/planet/
+    operations:
+      - method: DELETE
+        summary: "Delete planets."
+        notes: "Delete planets by ID."
+        nickname: deleteplanet
+        type: deleteplanet
+        parameters:
+          - name: version
+            description: "API version."
+            required: true
+            type: string
+            enum:
+            - v1
+            default: "v1"
+            paramType: path
+          - name: Authorization
+            description: "Access Token."
+            required: true
+            type: string
+            paramType: header
+          - name: client_id
+            description: "Client id."
+            required: true
+            type: string
+            paramType: query
+          - name: client_secret
+            description: "Client secret."
+            required: true
+            type: string
+            paramType: query
+          - name: id_planet
+            description: "Id planet."
+            required: true
+            type: integer
+            paramType: query
+        consumes:
+          - application/x-www-form-urlencoded
+        produces:
+          - application/json
+        responseMessages:
+

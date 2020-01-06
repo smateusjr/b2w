@@ -78,7 +78,7 @@ COMMAND="python main.py"
     ;;
 
     help)
-        echo -en "Usage: /etc/init.d/invoice stop|start|restart|reload|status|help|unittest "
+        echo -en "Usage: /etc/init.d/planet stop|start|restart|reload|status|help|unittest "
     ;;
 
     restart)
