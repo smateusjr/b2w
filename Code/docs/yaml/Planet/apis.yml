@@ -161,22 +161,12 @@ apis:
             required: false
             type: string
             paramType: query
-          - name: climate
-            description: "Planet Climate."
-            required: false
-            type: string
-            paramType: query
-          - name: terrain
-            description: "Planet Terrain."
-            required: false
-            type: string
-            paramType: query
-          - name: qtd_films
-            description: "Number of planet film appearances."
+          - name: result_by_page
+            description: "Result by Page."
             required: false
             type: integer
             paramType: query
-          - name: npage
+          - name: n_page
             description: "Show page number."
             required: false
             type: integer

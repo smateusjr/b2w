@@ -1,7 +1,7 @@
 from application.v1.baseHandler.baseHandler import BaseHandler
-from math import ceil
 from datetime import datetime
 import services.base_exception as base_exception
+from bson import ObjectId
 
 # Swapi
 import services.swapi as swapi
@@ -33,118 +33,50 @@ class PlanetHandler(BaseHandler):
 
     def get(self):
 
-        self.request.log._info('GET Invoice')
+        self.request.log._info('GET Planet')
         try:
-            where = ""
-            total_npage = ""
-            result = dict()
-            qparams = list()
+            r_by_page = None
+            skips = None
+            q_params = dict()
 
-            if 'id_invoice' in self.fields.keys() and self.fields['id_invoice'].isdigit():
-                where += 'AND id_invoice = %s '
-                qparams.append(self.fields['id_invoice'])
+            if 'id_planet' in self.fields.keys() and self.fields['id_planet']:
+                if ObjectId.is_valid(self.fields['id_planet']):
+                    q_params.update(_id=ObjectId(self.fields['id_planet']))
+                else:
+                    raise base_exception.BaseExceptionError('invalid_id')
 
-            if 'Document' in self.fields.keys() and self.fields['Document']:
-                where += 'AND UPPER(Document) = UPPER(%s) '
-                qparams.append(self.fields['Document'])
-
-            if 'ReferenceMonth' in self.fields.keys() and self.fields['ReferenceMonth'] and \
-                    self.fields['ReferenceMonth'].isdigit():
-                where += "AND ReferenceMonth = %s "
-                qparams.append(self.fields['ReferenceMonth'])
-
-            if 'ReferenceYear' in self.fields.keys() and self.fields['ReferenceYear'] and \
-                    self.fields['ReferenceYear'].isdigit():
-                where += "AND ReferenceYear = %s "
-                qparams.append(self.fields['ReferenceYear'])
-
-            select = """SELECT 
-                                id_invoice,
-                                Amount,
-                                Document,
-                                Description,
-                                ReferenceMonth,
-                                ReferenceYear,
-                                CreatedAt
-                            FROM invoices 
-                            WHERE isActive = 1 
-                          """
-            if where:
-                select += where
-            cursor = self.db.cursor()
-
-            if 'orderby' in self.fields.keys() and self.fields['orderby']:
-                try:
-                    orderby = list()
-                    for i in self.fields['orderby'].split(','):
-                        if i.strip() in ['Document', 'ReferenceMonth', 'ReferenceYear']:
-                            orderby.append(i.strip())
-                    select += 'ORDER BY %s '
-                    qparams.append(", ".join(orderby))
-                except:
-                    pass
-
-            if 'ResultByPage' in self.fields.keys() and self.fields['ResultByPage'] and \
-                    self.fields['ResultByPage'].isdigit() and 'npage' in self.fields.keys() and \
-                    self.fields['npage'] and self.fields['npage'].isdigit():
-
-                # Get total
-                try:
-                    cursor.execute(select, params=qparams)
-                    cursor.fetchall()
-                    total_npage = cursor.rowcount
-                except mysql.connector.InterfaceError as e:
-                    base_exception.send_base_error_internal(e)
-
-                select += "LIMIT %s, %s;"
-                qparams.append(int(self.fields['npage']) * int(self.fields['ResultByPage'])\
-                               - int(self.fields['ResultByPage']))
-                qparams.append(int(self.fields['ResultByPage']))
-
-                result.update(
-                    qtd_pages=ceil(int(total_npage) / int(self.fields['ResultByPage'])),
-                    page=int(self.fields['npage']) if total_npage else 0
+            if 'name' in self.fields.keys() and self.fields['name'].isalnum():
+                q_params.update(
+                    name={'$regex': self.fields['name'], '$options': 'i'}
                 )
-            try:
-                cursor.execute(select, params=qparams)
-                rows = cursor.fetchall()
-                qtd_total = cursor.rowcount
-                result.update(total=total_npage if total_npage else qtd_total)
 
-                columns = [column[0] for column in cursor.description]
-                results_mysql = []
+            if 'result_by_page' in self.fields.keys() and self.fields[
+                'result_by_page'] and self.fields['result_by_page'].isdigit()\
+                    and 'n_page' in self.fields.keys() and\
+                    self.fields['n_page'] and self.fields['n_page'].isdigit():
+                skips = int(self.fields['result_by_page']) *\
+                        (int(self.fields['n_page']) - 1)
+                r_by_page = int(self.fields['result_by_page'])
 
-                for row in rows:
-                    results_mysql.append(dict((zip(columns, row))))
-            except mysql.connector.InterfaceError as e:
-                BaseExceptionError.send_base_error_internal(e)
+            planet_list = self.mongodb.planet_list(q_params, skips, r_by_page)
 
-            list_results = list()
-            for row in results_mysql:
-                for i in row:
-                    row[i] = self.utils.to_json_able(row[i])
-                list_results.append(row)
-
-            result.update(result=list_results)
-            cursor.close()
-            self.finish(result)
+            self.finish(planet_list)
 
         except base_exception.BaseExceptionError as e:
             self.send_base_error_exception(e.error)
         except Exception as e:
-            self.send_base_error_exception(e, 'internal_error')
+            self.send_base_error_exception('internal_error', e)
 
     def post(self):
 
         self.request.log._info('POST Planet')
         try:
-            q_params = list()
 
             if ('name' not in self.fields.keys() or not self.fields['name'])\
                 or ('climate' not in self.fields.keys() or not\
-                self.fields['climate']) or\
-                ('terrain' not in self.fields.keys() or not\
-                self.fields['terrain']):
+                    self.fields['climate']) or\
+                    ('terrain' not in self.fields.keys() or not\
+                    self.fields['terrain']):
                 raise base_exception.BaseExceptionError('missing_fields')
 
             # check qtd_films
@@ -179,33 +111,21 @@ class PlanetHandler(BaseHandler):
 
         self.request.log._info('DELETE Invoice')
         try:
-            if 'id_invoice' not in self.fields.keys() or not self.fields['id_invoice'] or not self.fields['id_invoice'].isdigit():
-                raise self.utils.BaseExceptionError('invalid_fields', 'id_invoice')
+            q_params = dict()
 
-            select = "SELECT id_invoice FROM invoices WHERE isActive = 1 AND id_invoice = %s;"
-            cursor = self.db.cursor()
-            try:
-                cursor.execute(select, params=[self.fields['id_invoice']])
-                row = cursor.fetchone()
-            except mysql.connector.InterfaceError as e:
-                self.send_base_error_internal(e)
-            if not row:
-                raise self.utils.BaseExceptionError('not_found', 'Invoice Not Found')
+            if 'id_planet' not in self.fields.keys() or not \
+                    self.fields['id_planet']:
+                raise base_exception.BaseExceptionError('missing_fields')
+            if not ObjectId.is_valid(self.fields['id_planet']):
+                raise base_exception.BaseExceptionError('not_found')
 
-            update = """UPDATE invoices SET 
-                        isActive = %s,
-                        DeactiveAt = %s
-                      WHERE id_invoice = %s;"""
+            q_params.update(_id=ObjectId(self.fields['id_planet']))
 
-            try:
-                cursor.execute(update, params=[0, datetime.now().strftime('%Y-%m-%d %H:%M:%S'), self.fields['id_invoice']])
-            except mysql.connector.InterfaceError as e:
-                self.send_base_error_internal(e)
+            planet_delete = self.mongodb.planet_delete(q_params)
 
-            self.db.commit()
-            cursor.close()
-            self.finish(dict())
-        except self.utils.BaseExceptionError as e:
-            self.send_base_error_exception(e.error, e.description)
+            self.finish(planet_delete)
+
+        except base_exception.BaseExceptionError as e:
+            self.send_base_error_exception(e.error)
         except Exception as e:
-            self.send_base_error_internal(e)
+            self.send_base_error_exception('internal_error', e)
