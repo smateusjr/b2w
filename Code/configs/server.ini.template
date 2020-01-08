@@ -6,11 +6,25 @@
 [docs]
     url = 'http://localhost:8889'
 
-[redis]
+[redis_token]
     host = '127.0.0.1'
     port = 6379
     db = 10
 
+[redis_swapi]
+    host = '127.0.0.1'
+    port = 6379
+    db = 11
+
 [grant]
     token_expire = 86400
+    swapi_expire = 86400
 
+[mongodb]
+    host = 'localhost'
+    port = 27017
+    database = 'starwars'
+    colletion = 'planet'
+
+[swapi]
+    url = 'https://swapi.co/api/planets/?search='

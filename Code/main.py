@@ -73,14 +73,14 @@ def shutdown():
         tornado.ioloop.IOLoop().instance().stop
     )
     try:
-        os.remove(PIDFILE)
+        os.remove('%s/%s' % (ROOTPATH, PIDFILE))
     except OSError:
         pass
 
 
 def send_signal(signal):
     try:
-        with open(PIDFILE) as f:
+        with open('%s/%s' % (ROOTPATH, PIDFILE)) as f:
             pid = int(f.read().strip())
 
         pgid = os.getpgid(pid)
@@ -90,7 +90,7 @@ def send_signal(signal):
 
 
 def save_pid():
-    with open(PIDFILE, 'w') as f:
+    with open('%s/%s' % (ROOTPATH, PIDFILE), 'w') as f:
         f.write(str(os.getpid()))
 
 

@@ -1,5 +1,4 @@
 from application.v1.baseHandler.baseHandler import BaseHandler
-from datetime import datetime
 import services.base_exception as base_exception
 from bson import ObjectId
 
@@ -80,21 +79,24 @@ class PlanetHandler(BaseHandler):
                 raise base_exception.BaseExceptionError('missing_fields')
 
             # check qtd_films
-            ext_swapi = swapi.Swapi(
-                '%s%s' % (
-                    self.server_config['swapi']['url'],
-                    self.fields['name']
-                ),
-                self.redis_db_swapi,
-                self.server_config['grant']['swapi_expire']
-            )
-            qtd_films = ext_swapi.get_qtd_planet_by_name()
+            if 'qtd_films' in self.fields and self.fields['qtd_films'] and \
+                    self.fields['qtd_films'].isdigit():
+                qtd_films = self.fields['qtd_films']
+            else:
+                ext_swapi = swapi.Swapi(
+                    '%s%s' % (
+                        self.server_config['swapi']['url'],
+                        self.fields['name']
+                    ),
+                    self.redis_db_swapi,
+                    self.server_config['grant']['swapi_expire']
+                )
+                qtd_films = ext_swapi.get_qtd_planet_by_name()
             data = dict(
                 name=self.fields['name'],
                 climate=self.fields['climate'],
                 terrain=self.fields['terrain'],
-                qtd_films=self.fields['qtd_films'] if 'qtd_films' in\
-                    self.fields and self.fields['qtd_films'] else qtd_films
+                qtd_films=qtd_films
             )
             id_planet = self.mongodb.planet_save(data)
 

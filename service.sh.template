@@ -10,10 +10,10 @@ END="\033[m"
 NOMEAPP='PLANET'
 
 #Virtualenv dir
-DIRVENV='~/.virtualenvs/b2w/'
+DIRVENV='/Users/smateus/.virtualenvs/b2w/'
 
 #App code dir
-DIRBASE='~/Documents/projects/b2w/Code/'
+DIRBASE='/Users/smateus/Documents/projects/b2w/Code/'
 
 #Pid file
 PIDFILE='planet.pid'

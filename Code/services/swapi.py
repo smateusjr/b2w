@@ -13,7 +13,7 @@ class Swapi():
         if qtd_planet_film:
             return qtd_planet_film
         else:
-            swapi_request = requests.get(self.url_swapi, timeout=1)
+            swapi_request = requests.get(self.url_swapi, timeout=3)
             swapi_request.raise_for_status()
             swapi_response = swapi_request.json()
             qtd_planet_film = len(swapi_response['results'][0]['films'])

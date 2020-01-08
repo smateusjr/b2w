@@ -54,6 +54,11 @@
         error = 'invalid_grant'
         error_description = 'Grant code is Invalid.'
 
+    [[invalid_id]]
+        code = 401
+        error = 'invalid_id'
+        error_description = 'Planet Id is Invalid.'
+
     [[missing_fields]]
         code = 400
         error = 'invalid_request'
@@ -68,6 +73,11 @@
         code = 400
         error = 'invalid_request'
         error_description = 'Request was missing the 'access_token' or 'refresh_token' parameter.'
+
+    [[invalid_token_type]]
+        code = 400
+        error = 'invalid_token_type'
+        error_description = 'Revoke only access_token.'
 
     [[login_input_not_found]]
         code = 400
