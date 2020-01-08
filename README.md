@@ -1,6 +1,6 @@
 **PLANET API**
 
-Gostaria de agradeçer a oportunidade e espero que a minha forma de pensar seja compativel com a Stone.
+Gostaria de agradeçer a oportunidade e espero que a minha forma de pensar seja compativel com a B2w.
 
 Pensei nos detalhes, mas não aprofundei neles por causa do tempo, tenho outras atividades na semana, exemplo: o Swagger, versionamento da API, classe de logs, etc. 
 
