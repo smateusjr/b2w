@@ -1,6 +1,6 @@
 **PLANET API**
 
-Gostaria de agradeçer a oportunidade e espero que a minha forma de pensar seja compativel com a B2w.
+Gostaria de agradeçer a oportunidade e espero que a minha forma de pensar seja compativel.
 
 Pensei nos detalhes, mas não aprofundei neles por causa do tempo, tenho outras atividades na semana, exemplo: o Swagger, versionamento da API, classe de logs, etc. 
 
@@ -40,11 +40,11 @@ Configurar e copiar para "/etc/init.d/planet"
 
 Configuração:
 
-DIRVENV='~/.virtualenvs/b2w/'
+DIRVENV='~/.virtualenvs/desafio/'
 
 #Caminho absoluto do diretório onde esta a virtualenv
 
-DIRBASE='~/Documents/projects/b2w/Code/'
+DIRBASE='~/Documents/projects/desafio/Code/'
 
 #Caminho absoluto do diretório onde esta o código da aplicação
 
@@ -62,7 +62,7 @@ Também é possivel versionar o arquivo utils "Code/utils" com funções especif
 Todos os arquivos estão na pasta "Code/tests"
 Pode ser configurado em uma IDE, usando o service.sh com o parâmetro "unittest" ou com a linha abaixo:
 
-#python -m unittest discover -s /Users/smateus/Documents/projects/b2w/Code/tests -t /Users/smateus/Documents/projects/b2w/Code/tests
+#python -m unittest discover -s /Users/smateus/Documents/projects/desfio/Code/tests -t /Users/smateus/Documents/projects/desafio/Code/tests
 
 #### API
 Nenhum parâmetro é obrigatório, assim ele usa as informações default dos arquivos .ini
